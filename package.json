@@ -1,0 +1,31 @@
+{
+    "name": "aic-helloworld-js-actions",
+    "author": "Banco do Brasil S.A Ditec - Gecis",
+    "description": "aic-hello-world-js",
+    "version": "1.0.0",
+    "main": "index.js",
+    "scripts": {
+        "lint": "echo lint fake sendo feito",
+        "test": "jest --coverage --no-cache",
+        "start": "node src/index.js",
+        "build": "npm pack",
+        "integrationTest": "echo \"Executa teste de integração\""
+    },
+    "jest": {
+        "testEnvironment": "node",
+        "coveragePathIgnorePatterns": [
+            "/node_modules/"
+        ],
+        "coverageDirectory": "<rootDir>/coverage/javascript/lcov"
+    },
+    "dependencies": {
+        "jest": "^29.6.1",
+        "node-sass": "^8.0.0"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/bbvinet/aic-helloworld-js-actions"
+    },
+    "keywords": [],
+    "license": "UNLICENSED"
+}

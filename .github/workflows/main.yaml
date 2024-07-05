@@ -1,0 +1,46 @@
+name: Release
+
+on:
+  workflow_dispatch:
+  pull_request_target:
+    types: [ closed ]
+    branches:    
+      - 'releases/**'
+
+env:
+  REPO_NAME: ${{ github.event.repository.name }}
+  BRANCH_NAME: ${{ github.ref_name }}
+
+jobs:
+  preparacao:
+    runs-on: esteiras
+    outputs:
+      releaseVersion: ${{ steps.get_release_version.outputs.RELEASE_VERSION }}
+      ehVersaoFechada: ${{ steps.get_versao_fechada.outputs.VERSAO_FECHADA }}
+    steps:
+      - name: Get the Release Version
+        id: get_release_version
+        run: |
+          releaseVersion = $(require('./package.json').version)
+          echo "RELEASE_VERSION=$releaseVersion" >> $GITHUB_OUTPUT
+      - name: Verifica se é versão fechada
+        id: get_versao_fechada
+        run: |
+          pattern="^([0-9]*\.){2}[0-9]$"
+          if [[ $releaseVersion =~ $pattern ]]
+          then
+            echo "VERSAO_FECHADA=True" >> $GITHUB_OUTPUT
+          else
+            echo "VERSAO_FECHADA=False" >> $GITHUB_OUTPUT
+          fi
+  create_release:
+    needs: preparacao
+    runs-on: esteiras
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+      - name: print
+        run: |
+          echo "É Versão Fechada: ${{ needs.preparacao.outputs.ehVersaoFechada }}"
+          echo "Versão: ${{ needs.preparacao.outputs.releaseVersion }}"
+        
