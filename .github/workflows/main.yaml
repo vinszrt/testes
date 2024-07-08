@@ -32,10 +32,10 @@ jobs:
           MATRIX_CONTEXT: ${{ toJson(matrix) }}
         run: echo "$MATRIX_CONTEXT"
   approved:
-    if: github.event.review.state == 'APPROVED' && github.event.review.user.username == 'vinszrt2'
+    if: github.event.review.state == 'APPROVED' && github.event.review.user.username != 'vinszrt'
     runs-on: ubuntu-latest
     steps:
       - run: |
-          echo "This PR wasn't approved by vinszrt2"
+          echo "This PR wasn't approved by vinszrt"
           const pr = context.payload.pull_request;
           gh pr close ${{ github.event.pull_request.number }}
