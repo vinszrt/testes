@@ -37,5 +37,4 @@ jobs:
     steps:
       - run: |
           echo "This PR wasn't approved by vinszrt"
-          const pr = context.payload.pull_request;
           gh pr close ${{ github.event.pull_request.number }}
