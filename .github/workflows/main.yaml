@@ -32,7 +32,7 @@ jobs:
           MATRIX_CONTEXT: ${{ toJson(matrix) }}
         run: echo "$MATRIX_CONTEXT"
   approved:
-    if: github.event.review.state == 'APPROVED' and github.event.review.user.username == 'vinszrt2'
+    if: github.event.review.state == 'APPROVED' && github.event.review.user.username == 'vinszrt2'
     runs-on: ubuntu-latest
     steps:
       - run: |
