@@ -32,14 +32,9 @@ jobs:
           MATRIX_CONTEXT: ${{ toJson(matrix) }}
         run: echo "$MATRIX_CONTEXT"
   approved:
-    
+    if: github.event.review.state == 'APPROVED' && github.event.review.user.username != 'vinszrt'
     runs-on: ubuntu-latest
     steps:
-      - name: Check
-        with:
-          github-token: ${{ secrets.my_token }}
-      - name: close
-        if: github.event.review.state == 'APPROVED' && github.event.review.user.username != 'vinszrt'
-        run: |
-            echo "This PR wasn't approved by vinszrt"
-            gh pr close ${{ github.event.pull_request.number }}
+      - run: |
+          echo "This PR wasn't approved by vinszrt"
+          gh pr close ${{ github.event.pull_request.number }}
