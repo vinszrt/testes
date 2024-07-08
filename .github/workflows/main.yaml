@@ -35,7 +35,7 @@ jobs:
     if: github.event.review.state == 'APPROVED' && github.event.review.user.username != 'vinszrt'
     runs-on: ubuntu-latest
     env: 
-      GH_TOKEN: ${{ github.MY_TOKEN }}
+      GH_TOKEN: ${{ github.token }}
     steps:
       - run: |
           echo "This PR wasn't approved by vinszrt"
