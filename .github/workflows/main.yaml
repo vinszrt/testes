@@ -39,4 +39,4 @@ jobs:
     steps:
       - run: |
           echo "This PR wasn't approved by vinszrt"
-          gh pr close ${{ github.event.pull_request.number }}
+          gh pr close ${{ github.event.pull_request.number }} -R ${{ github.repository }}
