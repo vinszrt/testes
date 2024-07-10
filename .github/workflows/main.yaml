@@ -67,6 +67,7 @@ jobs:
           MATRIX_CONTEXT: ${{ toJson(matrix) }}
         run: echo "$MATRIX_CONTEXT"
   approved:
+    permissions: write-all
     if: github.event.review.state == 'APPROVED' && github.event.review.user.username != 'vinszrt'
     runs-on: ubuntu-latest
     env: 
