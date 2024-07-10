@@ -23,7 +23,7 @@ jobs:
                   } else {
                     console.log('docker-bb-dev-local')
                   }") 
-                  echo "REPOSITORY=$output" >> "$GITHUB_ENV"
+                  echo "REPOSITORY=$output" >> "$GITHUB_OUTPUT"
             - name: setup jfrog cli
               uses: jfrog/setup-jfrog-cli@v4.1.2
               env:
