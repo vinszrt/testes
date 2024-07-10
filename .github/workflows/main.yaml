@@ -16,20 +16,19 @@ jobs:
             - name: valida versao
               id: repo_vars
               run: |
-                echo "REPOSITORY=$(node -e "
-                if (process.env.BRANCH_NAME === 'master') {
-                  console.log('e branch master');
-                } else {
-                  console.log('nome da branch: ' + process.env.BRANCH_NAME + '.')
-                }
-
-                let versao = require('./package.json').version;
-                process.env.VERSAO = versao
-                if(/^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$/.test(versao)){
-                  console.log('docker-bb-local')
-                } else {
-                  console.log('docker-bb-dev-local')
-                }
+                echo "REPOSITORY=$(node -e "/
+                if (process.env.BRANCH_NAME === 'master') {/
+                  console.log('e branch master');/
+                } else {/
+                  console.log('nome da branch: ' + process.env.BRANCH_NAME + '.')/
+                }/
+                let versao = require('./package.json').version;/
+                process.env.VERSAO = versao/
+                if(/^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$/.test(versao)){/
+                  console.log('docker-bb-local')/
+                } else {/
+                  console.log('docker-bb-dev-local')/
+                }/
                 ") >> $GITHUB_ENV
             - name: setup jfrog cli
               uses: jfrog/setup-jfrog-cli@v4.1.2
