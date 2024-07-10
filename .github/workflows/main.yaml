@@ -4,6 +4,41 @@ on:
     types: [submitted]
 
 jobs:
+  build:
+        runs-on: ubuntu-latest
+        steps:
+            - name: checkout
+              uses: actions/checkout@v4
+            - name: configurar nodejs
+              uses: actions/setup-node@v3
+              with:
+                node-version: 20
+            - name: valida versao
+              run: |
+                echo "REPOSITORY=$(node -e "
+                if (process.env.BRANCH_NAME === 'master') {
+                  console.log('e branch master');
+                } else {
+                  console.log('nome da branch: ' + process.env.BRANCH_NAME + '.')
+                }
+
+                let versao = require('./package.json').version;
+                process.env.VERSAO = versao
+                if(/^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$/.test(versao)){
+                  console.log('docker-bb-local')
+                } else {
+                  console.log('docker-bb-dev-local')
+                }
+                ") >> "$GITHUB_ENV"
+            - name: setup jfrog cli
+              uses: jfrog/setup-jfrog-cli@v4.1.2
+              env:
+                JF_URL: https://binarios.intranet.bb.com.br
+                JF_USER: ${{ secrets.ATF_BINARIOS_CI_USER }}
+                JF_PASSWORD: ${{ secrets.ATF_BINARIOS_CI_PASS }}
+            - name: valida versao
+              run: |
+                jf rt s "${{ env.REPOSITORY }}/bb/aic/${GITHUB_ACTION_REPOSITORY}/${VERSAO}/manifest.json"
   dump_contexts_to_log:
     runs-on: ubuntu-latest
     steps:
@@ -32,10 +67,12 @@ jobs:
           MATRIX_CONTEXT: ${{ toJson(matrix) }}
         run: echo "$MATRIX_CONTEXT"
   approved:
-    if: github.event.review.state == 'APPROVED' and github.event.review.user.username == 'vinszrt2'
+    permissions: write-all
+    if: github.event.review.state == 'APPROVED' && github.event.review.user.username != 'vinszrt'
     runs-on: ubuntu-latest
+    env: 
+      GH_TOKEN: ${{ github.token }}
     steps:
       - run: |
-          echo "This PR wasn't approved by vinszrt2"
-          const pr = context.payload.pull_request;
-          gh pr close ${{ github.event.pull_request.number }}
+          echo "This PR wasn't approved by vinszrt"
+          gh pr close ${{ github.event.pull_request.number }} -R ${{ github.repository }}
