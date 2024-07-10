@@ -30,8 +30,9 @@ jobs:
                 JF_URL: https://binarios.intranet.bb.com.br
                 JF_USER: ${{ secrets.ATF_BINARIOS_CI_USER }}
                 JF_PASSWORD: ${{ secrets.ATF_BINARIOS_CI_PASS }}
-            - name: valida versao
+            - name: usa versao
               run: |
+                echo ${{ steps.repo_vars.outputs.REPOSITORY }}
                 jf rt s "${{ steps.repo_vars.outputs.REPOSITORY }}/bb/aic/${GITHUB_ACTION_REPOSITORY}/${VERSAO}/manifest.json"
   dump_contexts_to_log:
     runs-on: ubuntu-latest
