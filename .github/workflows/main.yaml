@@ -14,6 +14,7 @@ jobs:
               with:
                 node-version: 20
             - name: valida versao
+              id: repo_vars
               run: |
                 echo "REPOSITORY=$(node -e "
                 if (process.env.BRANCH_NAME === 'master') {
@@ -29,7 +30,7 @@ jobs:
                 } else {
                   console.log('docker-bb-dev-local')
                 }
-                ") >> "$GITHUB_ENV"
+                ") >> $GITHUB_ENV
             - name: setup jfrog cli
               uses: jfrog/setup-jfrog-cli@v4.1.2
               env:
@@ -38,7 +39,7 @@ jobs:
                 JF_PASSWORD: ${{ secrets.ATF_BINARIOS_CI_PASS }}
             - name: valida versao
               run: |
-                jf rt s "${{ env.REPOSITORY }}/bb/aic/${GITHUB_ACTION_REPOSITORY}/${VERSAO}/manifest.json"
+                jf rt s "${{ steps.repo_vars.outputs.REPOSITORY }}/bb/aic/${GITHUB_ACTION_REPOSITORY}/${VERSAO}/manifest.json"
   dump_contexts_to_log:
     runs-on: ubuntu-latest
     steps:
